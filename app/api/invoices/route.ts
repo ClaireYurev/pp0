@@ -44,6 +44,7 @@ export async function POST(req: Request) {
 
       const project = await prisma.project.findUnique({
         where: { id: projectId },
+        include: { freelancer: true, client: true },
       })
 
       if (!project) {
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
           contract: contractId ? { connect: { id: contractId } } : undefined,
           estimate: estimateId ? { connect: { id: estimateId } } : undefined,
           client: { connect: { id: project.clientId } },
-          freelancer: { connect: { id: session.user.id } },
+          freelancer: { connect: { id: project.freelancerId } },
           invoiceNumber,
           issueDate: new Date(issueDate),
           dueDate: new Date(dueDate),

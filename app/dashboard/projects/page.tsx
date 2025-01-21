@@ -24,16 +24,27 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
     redirect("/auth/signin")
   }
 
+  const status = searchParams?.status
+  const search = searchParams?.search
+  const sort = searchParams?.sort
+
   const where: Prisma.ProjectWhereInput = {
     OR: [{ freelancerId: session.user.id }, { clientId: session.user.id }],
-    ...(searchParams.status && ["PLANNING", "IN_PROGRESS", "COMPLETED"].includes(searchParams.status)
-      ? { status: searchParams.status as "PLANNING" | "IN_PROGRESS" | "COMPLETED" }
+    ...(status && ["PLANNING", "IN_PROGRESS", "COMPLETED"].includes(status)
+      ? { status: status as "PLANNING" | "IN_PROGRESS" | "COMPLETED" }
       : {}),
-    ...(searchParams.search ? { projectName: { contains: searchParams.search, mode: "insensitive" } } : {}),
+    ...(search
+      ? {
+          projectName: {
+            contains: search,
+            mode: "insensitive",
+          },
+        }
+      : {}),
   }
 
   const orderBy: Prisma.ProjectOrderByWithRelationInput =
-    searchParams.sort === "name" ? { projectName: "asc" } : { createdAt: "desc" }
+    sort === "name" ? { projectName: "asc" } : { createdAt: "desc" }
 
   const projects = (await prisma.project.findMany({
     where,
