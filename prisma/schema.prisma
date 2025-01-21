@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  userType          String    @db.VarChar(10)
+  firstName         String?   @db.VarChar(255)
+  lastName          String?   @db.VarChar(255)
+  email             String    @unique @db.VarChar(255)
+  passwordHash      String?   @db.VarChar(255)
+  googleId          String?   @unique @db.VarChar(255)
+  googleEmail       String?   @db.VarChar(255)
+  googleAvatarUrl   String?   @db.VarChar(255)
+  subscriptionTier  String    @default("community") @db.VarChar(20)
+  stripeCustomerId  String?   @db.VarChar(255)
+  taxRate           Decimal   @default(0.00) @db.Decimal(5, 2)
+  taxId             String?   @db.VarChar(255)
+  defaultCurrency   String    @default("USD") @db.VarChar(3)
+  createdAt         DateTime  @default(now())
+  projects          Project[]
+}
+
+model Project {
+  id                Int       @id @default(autoincrement())
+  freelancerId      Int
+  clientId          Int
+  projectName       String    @db.VarChar(255)
+  projectDescription String?
+  currency          String    @db.VarChar(3)
+  status            String    @default("active") @db.VarChar(20)
+  createdAt         DateTime  @default(now())
+  freelancer        User      @relation(fields: [freelancerId], references: [id])
+  client            User      @relation(fields: [clientId], references: [id])
+}
+
+// Add other models (Brief, Proposal, Contract, etc.) as needed
+
