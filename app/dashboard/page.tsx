@@ -3,6 +3,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
 import { IncomeChart } from "@/components/IncomeChart"
 import { ProjectList, type Project } from "@/components/ProjectList"
+import { QuickActionFAB } from "@/components/QuickActionFAB"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -61,6 +62,7 @@ export default async function DashboardPage() {
         <h2 className="text-2xl font-semibold mb-4">Recent Projects</h2>
         <ProjectList projects={mockProjects} />
       </div>
+      <QuickActionFAB />
     </div>
   )
 }

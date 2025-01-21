@@ -1,3 +1,15 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 enum UserType {
   freelancer
   client
@@ -8,15 +20,6 @@ enum ProjectStatus {
   PLANNING
   IN_PROGRESS
   COMPLETED
-}
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -58,11 +61,13 @@ model Activity {
 
 model User {
   id                    String     @id @default(cuid())
-  userType              UserType  // This is likely an enum
+  userType              UserType
   firstName             String?    @db.VarChar(255)
   lastName              String?    @db.VarChar(255)
+  name                  String?
   email                 String     @unique @db.VarChar(255)
   emailVerified         DateTime?
+  image                 String?
   passwordHash          String?    @db.VarChar(255)
   googleId              String?    @unique @db.VarChar(255)
   googleEmail           String?    @db.VarChar(255)
@@ -77,13 +82,14 @@ model User {
   contractsAsClient     Contract[] @relation("ClientContracts")
   contractsAsFreelancer Contract[] @relation("FreelancerContracts")
   estimates             Estimate[]
-  invoices              Invoice[]
   projectsAsClient      Project[]  @relation("ClientProjects")
   projectsAsFreelancer  Project[]  @relation("FreelancerProjects")
   proposals             Proposal[]
   activities            Activity[]
   accounts              Account[]
   sessions              Session[]
+  invoicesAsClient      Invoice[]  @relation("ClientInvoices")
+  invoicesAsFreelancer  Invoice[]  @relation("FreelancerInvoices")
 }
 
 model VerificationToken {
@@ -101,8 +107,9 @@ model Project {
   projectName        String     @db.VarChar(255)
   projectDescription String?
   currency           String     @db.VarChar(3)
-  status             String     @default("active") @db.VarChar(20)
+  status             ProjectStatus
   createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
   briefs             Brief[]
   contracts          Contract[]
   estimates          Estimate[]
@@ -232,11 +239,12 @@ model Milestone {
 
 model Invoice {
   id             String            @id @default(cuid())
-  projectId      String
+  projectId      String?
   contractId     String?
   estimateId     String?
   milestoneId    String?
   clientId       String
+  freelancerId   String
   invoiceNumber  String            @unique @db.VarChar(50)
   issueDate      DateTime
   dueDate        DateTime
@@ -245,15 +253,26 @@ model Invoice {
   totalAmountDue Decimal           @db.Decimal(10, 2)
   amountPaid     Decimal           @default(0.00) @db.Decimal(10, 2)
   paymentStatus  String            @db.VarChar(20)
+  clientEmail    String?
+  description    String?
   createdAt      DateTime          @default(now())
-  client         User              @relation(fields: [clientId], references: [id])
+  updatedAt      DateTime          @updatedAt
+  client         User              @relation("ClientInvoices", fields: [clientId], references: [id])
+  freelancer     User              @relation("FreelancerInvoices", fields: [freelancerId], references: [id])
   contract       Contract?         @relation(fields: [contractId], references: [id])
   estimate       Estimate?         @relation(fields: [estimateId], references: [id])
   milestone      Milestone?        @relation(fields: [milestoneId], references: [id])
-  project        Project           @relation(fields: [projectId], references: [id])
+  project        Project?          @relation(fields: [projectId], references: [id])
   lineItems      InvoiceLineItem[]
   receipts       Receipt[]
   refunds        Refund[]
+
+  @@index([projectId])
+  @@index([contractId])
+  @@index([estimateId])
+  @@index([milestoneId])
+  @@index([clientId])
+  @@index([freelancerId])
 }
 
 model InvoiceLineItem {
