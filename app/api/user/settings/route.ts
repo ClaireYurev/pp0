@@ -4,6 +4,17 @@ import { prisma } from "@/lib/prisma"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { z } from "zod"
 
+const addressSchema = z.object({
+  line1: z.string().min(1, "Address line 1 is required"),
+  line2: z.string().optional(),
+  line3: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  zipOrPostcode: z.string().min(1, "Zip/Postcode is required"),
+  stateProvinceCounty: z.string().optional(),
+  countryId: z.string().min(1, "Country is required"),
+  otherAddressDetails: z.string().optional(),
+})
+
 const settingsSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
@@ -11,6 +22,17 @@ const settingsSchema = z.object({
   defaultCurrency: z.string().length(3, "Currency must be a 3-letter code"),
   taxRate: z.number().min(0).max(100, "Tax rate must be between 0 and 100"),
   taxId: z.string().optional(),
+  company: z.string().optional(),
+  companyTaxId: z.string().optional(),
+  website: z.string().url().optional().or(z.literal("")),
+  fax: z.string().optional(),
+  businessEmail: z.string().email("Invalid email address").optional().or(z.literal("")),
+  phone: z.string().optional(),
+  preferredLanguage: z.string().optional(),
+  timeZone: z.string().optional(),
+  profilePicture: z.string().optional(),
+  mainAddress: addressSchema,
+  billingAddress: addressSchema.optional(),
 })
 
 export async function PATCH(req: Request) {
@@ -32,6 +54,29 @@ export async function PATCH(req: Request) {
         defaultCurrency: body.defaultCurrency,
         taxRate: body.taxRate,
         taxId: body.taxId,
+        company: body.company,
+        companyTaxId: body.companyTaxId,
+        website: body.website,
+        fax: body.fax,
+        businessEmail: body.businessEmail,
+        phone: body.phone,
+        preferredLanguage: body.preferredLanguage,
+        timeZone: body.timeZone,
+        profilePicture: body.profilePicture,
+        mainAddress: {
+          upsert: {
+            create: body.mainAddress,
+            update: body.mainAddress,
+          },
+        },
+        billingAddress: body.billingAddress
+          ? {
+              upsert: {
+                create: body.billingAddress,
+                update: body.billingAddress,
+              },
+            }
+          : undefined,
       },
     })
 

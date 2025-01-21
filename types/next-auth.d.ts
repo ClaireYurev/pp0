@@ -10,6 +10,35 @@ declare module "next-auth" {
       lastName: string
       image?: string | null
       userType: UserType
+      company?: string
+      companyTaxId?: string
+      website?: string
+      fax?: string
+      businessEmail?: string
+      phone?: string
+      preferredLanguage?: string
+      timeZone?: string
+      profilePicture?: string
+      mainAddress?: {
+        line1: string
+        line2?: string
+        line3?: string
+        city: string
+        zipOrPostcode: string
+        stateProvinceCounty?: string
+        countryId: string
+        otherAddressDetails?: string
+      }
+      billingAddress?: {
+        line1: string
+        line2?: string
+        line3?: string
+        city: string
+        zipOrPostcode: string
+        stateProvinceCounty?: string
+        countryId: string
+        otherAddressDetails?: string
+      }
     }
   }
 }

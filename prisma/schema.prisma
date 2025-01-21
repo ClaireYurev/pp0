@@ -78,6 +78,19 @@ model User {
   taxId                 String?    @db.VarChar(255)
   defaultCurrency       String     @default("USD") @db.VarChar(3)
   createdAt             DateTime   @default(now())
+  company               String?    @db.VarChar(255)
+  companyTaxId          String?    @db.VarChar(255)
+  website               String?    @db.VarChar(255)
+  fax                   String?    @db.VarChar(50)
+  businessEmail         String?    @db.VarChar(255)
+  phone                 String?    @db.VarChar(50)
+  preferredLanguage     String?    @db.VarChar(10)
+  timeZone              String?    @db.VarChar(50)
+  profilePicture        String?    @db.Text
+  mainAddress           Address?   @relation("MainAddress", fields: [mainAddressId], references: [id])
+  mainAddressId         String?    @unique
+  billingAddress        Address?   @relation("BillingAddress", fields: [billingAddressId], references: [id])
+  billingAddressId      String?    @unique
   briefs                Brief[]
   contractsAsClient     Contract[] @relation("ClientContracts")
   contractsAsFreelancer Contract[] @relation("FreelancerContracts")
@@ -90,6 +103,20 @@ model User {
   sessions              Session[]
   invoicesAsClient      Invoice[]  @relation("ClientInvoices")
   invoicesAsFreelancer  Invoice[]  @relation("FreelancerInvoices")
+}
+
+model Address {
+  id                 String  @id @default(cuid())
+  line1              String
+  line2              String?
+  line3              String?
+  city               String
+  zipOrPostcode      String
+  stateProvinceCounty String?
+  countryId          String
+  otherAddressDetails String?
+  userMainAddress    User?   @relation("MainAddress")
+  userBillingAddress User?   @relation("BillingAddress")
 }
 
 model VerificationToken {
