@@ -1,23 +1,21 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 
-const prisma = new PrismaClient()
-
-export default NextAuth({
+const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (account.provider === "google") {
+      if (account?.provider === "google") {
         const existingUser = await prisma.user.findUnique({
-          where: { email: user.email },
+          where: { email: user.email! },
         })
 
         if (existingUser) {
@@ -25,9 +23,9 @@ export default NextAuth({
           await prisma.user.update({
             where: { id: existingUser.id },
             data: {
-              googleId: profile.sub,
-              googleEmail: profile.email,
-              googleAvatarUrl: profile.picture,
+              googleId: profile?.sub,
+              googleEmail: profile?.email,
+              googleAvatarUrl: profile?.picture,
             },
           })
         } else {
@@ -35,12 +33,12 @@ export default NextAuth({
           await prisma.user.create({
             data: {
               userType: "freelancer", // Default to freelancer, can be changed later
-              firstName: profile.given_name,
-              lastName: profile.family_name,
-              email: profile.email,
-              googleId: profile.sub,
-              googleEmail: profile.email,
-              googleAvatarUrl: profile.picture,
+              firstName: profile?.given_name,
+              lastName: profile?.family_name,
+              email: profile?.email!,
+              googleId: profile?.sub,
+              googleEmail: profile?.email,
+              googleAvatarUrl: profile?.picture,
             },
           })
         }
@@ -48,8 +46,10 @@ export default NextAuth({
       return true
     },
     async session({ session, user }) {
-      session.user.id = user.id
-      session.user.userType = user.userType
+      if (session?.user) {
+        session.user.id = user.id
+        session.user.userType = user.userType
+      }
       return session
     },
   },
@@ -57,4 +57,6 @@ export default NextAuth({
     signIn: "/auth/signin",
   },
 })
+
+export { handler as GET, handler as POST }
 

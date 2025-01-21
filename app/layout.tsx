@@ -1,19 +1,28 @@
-import type { Metadata } from 'next'
-import './globals.css'
+import { Inter } from "next/font/google"
+import AuthProvider from "@/components/AuthProvider"
+import Layout from "@/components/Layout"
+import "./globals.css"
 
-export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+const inter = Inter({ subsets: ["latin"] })
+
+export const metadata = {
+  title: "Palette Pal - Freelance Designer Tools",
+  description: "Manage your freelance design business with ease",
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={inter.className}>
+        <AuthProvider>
+          <Layout>{children}</Layout>
+        </AuthProvider>
+      </body>
     </html>
   )
 }
+
