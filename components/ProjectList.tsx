@@ -8,7 +8,7 @@ export type Project = {
   currency: string
   freelancerId: string
   clientId: string
-  createdAt: Date
+  createdAt: Date | null
   projectDescription: string | null
 }
 
@@ -31,7 +31,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
               <Badge variant={project.status === "COMPLETED" ? "default" : "secondary"}>{project.status}</Badge>
             </TableCell>
             <TableCell>{project.currency}</TableCell>
-            <TableCell>{project.createdAt.toLocaleDateString()}</TableCell>
+            <TableCell>{project.createdAt ? project.createdAt.toLocaleDateString() : "N/A"}</TableCell>
           </TableRow>
         ))}
       </TableBody>

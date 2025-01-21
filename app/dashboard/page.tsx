@@ -19,9 +19,36 @@ export default async function DashboardPage() {
   ]
 
   const mockProjects: Project[] = [
-    { id: "1", name: "Website Redesign", status: "In Progress" },
-    { id: "2", name: "Mobile App Development", status: "Planning" },
-    { id: "3", name: "Brand Identity", status: "Completed" },
+    {
+      id: "1",
+      projectName: "Website Redesign",
+      status: "IN_PROGRESS",
+      currency: "USD",
+      freelancerId: session.user.id,
+      clientId: session.user.id,
+      createdAt: new Date(),
+      projectDescription: null,
+    },
+    {
+      id: "2",
+      projectName: "Mobile App Development",
+      status: "PLANNING",
+      currency: "USD",
+      freelancerId: session.user.id,
+      clientId: session.user.id,
+      createdAt: new Date(),
+      projectDescription: null,
+    },
+    {
+      id: "3",
+      projectName: "Brand Identity",
+      status: "COMPLETED",
+      currency: "USD",
+      freelancerId: session.user.id,
+      clientId: session.user.id,
+      createdAt: new Date(),
+      projectDescription: null,
+    },
   ]
 
   return (
