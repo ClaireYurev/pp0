@@ -1,31 +1,38 @@
-import { redirect } from "next/navigation"
-import { getServerSession } from "next-auth"
-import dynamic from "next/dynamic"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "../api/auth/[...nextauth]/route"
-
-const IncomeChartDynamic = dynamic(() => import("@/components/IncomeChart"), {
-  loading: () => <p>Loading chart...</p>,
-})
+import { redirect } from "next/navigation"
+import { IncomeChart } from "@/components/IncomeChart"
+import { ProjectList, type Project } from "@/components/ProjectList"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
 
-  if (!session?.user) {
+  if (!session) {
     redirect("/auth/signin")
   }
 
-  // Temporary mock data for the chart
-  const mockData = [
+  // Temporary mock data
+  const mockIncomeData = [
     { issueDate: new Date("2024-01-01"), amount: 1000 },
     { issueDate: new Date("2024-01-15"), amount: 1500 },
     { issueDate: new Date("2024-02-01"), amount: 2000 },
   ]
 
+  const mockProjects: Project[] = [
+    { id: "1", name: "Website Redesign", status: "In Progress" },
+    { id: "2", name: "Mobile App Development", status: "Planning" },
+    { id: "3", name: "Brand Identity", status: "Completed" },
+  ]
+
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      <div className="grid gap-6">
-        <IncomeChartDynamic data={mockData} />
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="col-span-1 md:col-span-2">
+        <h2 className="text-2xl font-semibold mb-4">Income Overview</h2>
+        <IncomeChart data={mockIncomeData} />
+      </div>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Recent Projects</h2>
+        <ProjectList projects={mockProjects} />
       </div>
     </div>
   )
