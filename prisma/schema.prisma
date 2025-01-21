@@ -4,6 +4,12 @@ enum UserType {
   admin
 }
 
+enum ProjectStatus {
+  PLANNING
+  IN_PROGRESS
+  COMPLETED
+}
+
 generator client {
   provider = "prisma-client-js"
 }

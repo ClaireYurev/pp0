@@ -3,8 +3,13 @@ import { Badge } from "@/components/ui/badge"
 
 export type Project = {
   id: string
-  name: string
-  status: "Planning" | "In Progress" | "Completed"
+  projectName: string
+  status: "PLANNING" | "IN_PROGRESS" | "COMPLETED"
+  currency: string
+  freelancerId: string
+  clientId: string
+  createdAt: Date
+  projectDescription: string | null
 }
 
 export function ProjectList({ projects }: { projects: Project[] }) {
@@ -14,15 +19,19 @@ export function ProjectList({ projects }: { projects: Project[] }) {
         <TableRow>
           <TableHead>Name</TableHead>
           <TableHead>Status</TableHead>
+          <TableHead>Currency</TableHead>
+          <TableHead>Created At</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {projects.map((project) => (
           <TableRow key={project.id}>
-            <TableCell>{project.name}</TableCell>
+            <TableCell>{project.projectName}</TableCell>
             <TableCell>
-              <Badge variant={project.status === "Completed" ? "default" : "secondary"}>{project.status}</Badge>
+              <Badge variant={project.status === "COMPLETED" ? "default" : "secondary"}>{project.status}</Badge>
             </TableCell>
+            <TableCell>{project.currency}</TableCell>
+            <TableCell>{project.createdAt.toLocaleDateString()}</TableCell>
           </TableRow>
         ))}
       </TableBody>
