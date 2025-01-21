@@ -1,0 +1,189 @@
+Here's a comprehensive list of incomplete functionalities and placeholder items in the current codebase:
+
+1. Dashboard Layout:
+
+1. `/dashboard/settings` page is missing
+2. `/dashboard/invoices` page is missing
+
+
+
+2. QuickActionFAB (Floating Action Button):
+
+1. New Invoice functionality is not implemented
+2. New Estimate functionality is not implemented
+3. New Deposit Request functionality is not implemented
+
+
+
+3. ProjectForm component:
+
+1. Error handling for form submission is basic and could be improved
+2. Success message after form submission is not implemented
+
+
+
+4. ProjectList component:
+
+1. Edit and Delete functionalities for projects are not implemented
+2. Pagination for the project list is not implemented
+
+
+
+5. ProjectFilters component:
+
+1. The filter functionality is implemented, but there's no visual feedback for active filters
+
+
+
+6. CreateBriefForm component:
+
+1. Success message after brief creation is not implemented
+2. Error handling could be improved
+
+
+
+7. IncomeChart component:
+
+1. Currently using mock data, needs to be connected to real data from the backend
+
+
+
+8. Sidebar component:
+
+1. Some links are not functional (e.g., Invoices, Settings)
+
+
+
+9. Header component:
+
+1. User profile dropdown or menu is not implemented
+
+
+
+10. Authentication:
+
+1. Email/Password sign-up functionality is not fully implemented
+2. Password reset functionality is missing
+3. Email verification process is not implemented
+
+
+
+11. User Onboarding:
+
+1. No user onboarding flow after initial sign-up
+
+
+
+12. Profile Management:
+
+1. User profile editing functionality is missing
+
+
+
+13. Invoice Management:
+
+1. Create Invoice form is not implemented
+2. Invoice listing page is missing
+3. Invoice detail view is missing
+4. Invoice payment processing is not implemented
+
+
+
+14. Estimate Management:
+
+1. Create Estimate form is not implemented
+2. Estimate listing page is missing
+3. Estimate detail view is missing
+4. Convert Estimate to Invoice functionality is missing
+
+
+
+15. Contract Management:
+
+1. Contract creation form is not implemented
+2. Contract listing page is missing
+3. Contract detail view is missing
+4. Contract signing process is not implemented
+
+
+
+16. Client Management:
+
+1. Client listing page is missing
+2. Client detail view is missing
+3. Add/Edit client functionality is not implemented
+
+
+
+17. Project Detail Page:
+
+1. Comprehensive project detail view is missing
+2. Project timeline or progress tracking is not implemented
+
+
+
+18. Proposal Management:
+
+1. Create Proposal form is not implemented
+2. Proposal listing page is missing
+3. Proposal detail view is missing
+
+
+
+19. Time Tracking:
+
+1. Time tracking functionality for projects is not implemented
+
+
+
+20. Reporting:
+
+1. Financial reports and analytics are not implemented
+
+
+
+21. Notifications:
+
+1. In-app notification system is not implemented
+
+
+
+22. Settings:
+
+1. User settings page is missing (e.g., notification preferences, account settings)
+
+
+
+23. API Routes:
+
+1. Many API routes are missing or incomplete for various functionalities
+
+
+
+24. Error Handling:
+
+1. Global error handling and error boundaries are not implemented
+
+
+
+25. Loading States:
+
+1. Many components lack proper loading state representations
+
+
+
+26. Responsive Design:
+
+1. Some components may need improvements for better responsiveness across devices
+
+
+
+27. Accessibility:
+
+1. Comprehensive accessibility features and testing are not implemented
+
+
+
+28. Internationalization:
+
+1. Multi-language support is not implemented

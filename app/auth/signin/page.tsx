@@ -2,7 +2,7 @@
 
 import { signIn } from "next-auth/react"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 
 export default function SignIn() {
@@ -10,6 +10,8 @@ export default function SignIn() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackError = searchParams.get("error")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,6 +39,15 @@ export default function SignIn() {
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
         </div>
+        {(callbackError || error) && (
+          <div className="mb-4 text-red-600 text-center">
+            {callbackError === "OAuthCallback"
+              ? "There was a problem with the authentication callback. Please try again."
+              : callbackError === "OAuthCreateAccount"
+                ? "There was a problem creating your account. Please try again."
+                : error || "An authentication error occurred. Please try again."}
+          </div>
+        )}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
@@ -73,8 +84,6 @@ export default function SignIn() {
               />
             </div>
           </div>
-
-          {error && <div className="text-red-500 text-sm">{error}</div>}
 
           <div>
             <button
